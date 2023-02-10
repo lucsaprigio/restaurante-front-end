@@ -13,15 +13,27 @@ export function Cart() {
   const { addLaunch, removeLaunch } = useSaleLaunch();
 
   const [cards, setCards] = useState<ProductsProps[]>([]);
-  const [total, setTotal] = useState([]);
 
   async function loadCards() {
     const storagedSale = localStorage.getItem("@Sale:user");
 
-    setCards(JSON.parse(storagedSale)); 
+    setCards(JSON.parse(storagedSale));
   }
 
   async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
+    let data = {
+      ID_PRODUTO,
+      DESCRICAO,
+      VALOR_UNITARIO,
+      CD_CATEGORIA,
+      QUANTIDADE: +1,
+      VALOR_TOTAL
+    }
+
+    addLaunch({ ...data });
+  }
+
+  async function removeItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
     const sumQuantity = +1;
 
     let data = {
@@ -30,20 +42,7 @@ export function Cart() {
       VALOR_UNITARIO,
       CD_CATEGORIA,
       QUANTIDADE: sumQuantity,
-    }
-
-    addLaunch({ ...data });
-  }
-
-  async function removeItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE }: ProductsProps) {
-    const sumQuantity = +1;
-
-    let data = {
-      ID_PRODUTO,
-      DESCRICAO,
-      VALOR_UNITARIO,
-      CD_CATEGORIA,
-      QUANTIDADE: sumQuantity
+      VALOR_TOTAL
     }
 
     removeLaunch({ ...data })
@@ -60,10 +59,11 @@ export function Cart() {
       {
         cards.map((card) => (
           <SaleCard
+            key={card.ID_PRODUTO}
             description={card.DESCRICAO}
             price={card.VALOR_UNITARIO.toFixed(2)}
             quantity={card.QUANTIDADE}
-            total={card.VALOR_TOTAL = card.QUANTIDADE * card.VALOR_UNITARIO}
+            total={card.VALOR_TOTAL}
             src={card.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
             add={() => addItem({ ...card })}
             remove={() => removeItem({ ...card })}

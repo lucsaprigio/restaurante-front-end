@@ -9,9 +9,9 @@ interface Sale {
   ID_PRODUTO: number,
   DESCRICAO: string,
   VALOR_UNITARIO: number,
+  VALOR_TOTAL?: number;
   CD_CATEGORIA: number,
   QUANTIDADE: number,
-  VALOR_TOTAL?: number[];
 }
 
 interface SaleContextData {
@@ -33,7 +33,7 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
   async function loadData() {
     const saleStoraged = localStorage.getItem("@Sale:user");
 
-    const saleStoragedJSON = JSON.parse(saleStoraged)
+    const saleStoragedJSON = JSON.parse(saleStoraged);
 
     setSale(saleStoragedJSON)
   }
@@ -42,7 +42,34 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
     loadData()
   }, []);
 
-  async function addLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE }: Sale) {
+  async function addLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
+
+    const data = {
+      ID_PRODUTO,
+      DESCRICAO,
+      VALOR_UNITARIO,
+      QUANTIDADE,
+      CD_CATEGORIA,
+      VALOR_TOTAL
+    }
+
+    const saleList = [...sale];
+
+    const index = saleList.find(product => product.ID_PRODUTO === data.ID_PRODUTO);
+
+    if (!index) {
+      saleList.push({ ...data, VALOR_TOTAL: VALOR_UNITARIO * QUANTIDADE });
+    } else {
+      index.QUANTIDADE++
+      index.VALOR_TOTAL = index.VALOR_UNITARIO * index.QUANTIDADE
+      console.log(saleList)
+    }
+
+    setSale(saleList);
+    localStorage.setItem("@Sale:user", JSON.stringify(saleList));
+  }
+
+  async function removeLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
     const saleList = [...sale];
 
     const data = {
@@ -51,42 +78,14 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
       VALOR_UNITARIO,
       QUANTIDADE,
       CD_CATEGORIA,
-    }
-
-
-    const index = saleList.find(product => product.ID_PRODUTO === data.ID_PRODUTO);
-
-    const total = saleList.map((total) => (
-      total.VALOR_UNITARIO * total.QUANTIDADE
-    ));
-
-    if (!index) {
-      saleList.push({ ...data });
-    } else {
-      index.QUANTIDADE++
-    }
-
-    setSale(saleList);
-    console.log(saleList);
-    localStorage.setItem("@Sale:user", JSON.stringify(saleList));
-    localStorage.setItem("@Total:user", JSON.stringify(total));
-  }
-
-  async function removeLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE }: Sale) {
-    const saleList = [...sale];
-
-    const data = {
-      ID_PRODUTO,
-      DESCRICAO,
-      VALOR_UNITARIO,
-      QUANTIDADE,
-      CD_CATEGORIA
+      VALOR_TOTAL,
     }
 
     const index = saleList.find((product) => product.ID_PRODUTO === data.ID_PRODUTO);
 
     if (index?.QUANTIDADE! > 1) {
       index.QUANTIDADE = index?.QUANTIDADE! - 1;
+      index.VALOR_TOTAL = index.VALOR_UNITARIO * index.QUANTIDADE
       setSale(saleList);
       localStorage.setItem("@Sale:user", JSON.stringify(saleList));
     } else {
@@ -94,13 +93,12 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
       setSale(saleFiltered);
       localStorage.setItem("@Sale:user", JSON.stringify(saleFiltered));
     }
-    console.log(sale);
   }
 
   return (
-    <SaleContext.Provider value={{ sale: data, addLaunch, removeLaunch }}>
+    <SaleContext.Provider value={{ sale: { ...data }, addLaunch, removeLaunch }}>
       {children}
-    </SaleContext.Provider>
+    </SaleContext.Provider >
   )
 }
 

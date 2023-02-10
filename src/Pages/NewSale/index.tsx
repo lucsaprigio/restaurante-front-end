@@ -18,7 +18,7 @@ export function NewSale() {
 
   const [products, setProducts] = useState<ProductsProps[]>([]);
 
-  async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA }: ProductsProps) {
+  async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, VALOR_TOTAL }: ProductsProps) {
     const sumQuantity = 1;
 
     let data = {
@@ -26,7 +26,8 @@ export function NewSale() {
       DESCRICAO,
       VALOR_UNITARIO,
       CD_CATEGORIA,
-      QUANTIDADE: sumQuantity
+      QUANTIDADE: sumQuantity,
+      VALOR_TOTAL: VALOR_UNITARIO * 3
     }
 
     addLaunch({ ...data })
