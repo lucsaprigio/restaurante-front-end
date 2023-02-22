@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSaleLaunch } from '../../context/saleProvider';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Cards } from '../../components/Cards';
 import { ProductsProps } from '../../DTOs/ProductDTO';
@@ -30,13 +32,23 @@ export function NewSale() {
       VALOR_TOTAL: VALOR_UNITARIO * 3
     }
 
-    addLaunch({ ...data })
+    addLaunch({ ...data });
+
+    toast.success(`${data.DESCRICAO} foi adicionado ao pedido!`, {
+      position: "bottom-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    })
   }
 
   async function listProducts() {
     const response = await api.get('/list-products');
 
-    console.log(response.data);
     setProducts(response.data);
   }
 
@@ -53,19 +65,19 @@ export function NewSale() {
       <Content>
         {
           products.map((product) => (
-            <button onClick={() => addItem({ ...product })}>
-              <Cards
-                key={product.ID_PRODUTO}
-                description={product.DESCRICAO}
-                price={product.VALOR_UNITARIO.toFixed(2)}
-                promotionPrice={product.VALOR_UNITARIO.toFixed(2)}
-                information='loren ipsun korsen'
-                src={product.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
-              />
-            </button>
+            <Cards
+              key={product.ID_PRODUTO}
+              description={product.DESCRICAO}
+              price={product.VALOR_UNITARIO.toFixed(2)}
+              promotionPrice={product.VALOR_UNITARIO.toFixed(2)}
+              information='loren ipsun korsen'
+              src={product.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
+              add={() => addItem({ ...product })}
+            />
           ))
         }
       </Content>
-    </Container >
+      <ToastContainer />
+    </Container>
   );
 }

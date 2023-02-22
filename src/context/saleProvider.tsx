@@ -43,7 +43,6 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
   }, []);
 
   async function addLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
-
     const data = {
       ID_PRODUTO,
       DESCRICAO,
@@ -62,11 +61,23 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
     } else {
       index.QUANTIDADE++
       index.VALOR_TOTAL = index.VALOR_UNITARIO * index.QUANTIDADE
-      console.log(saleList)
     }
 
     setSale(saleList);
+
+    let total = saleList.map((sale) => (
+      sale.VALOR_TOTAL
+    ));
+
+
+    let sumItens = 0;
+    for (let i = 0; i < total.length; i++) {
+      sumItens += total[i]
+    }
+
+
     localStorage.setItem("@Sale:user", JSON.stringify(saleList));
+    localStorage.setItem("@Total:user", JSON.stringify(sumItens));
   }
 
   async function removeLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
@@ -88,10 +99,27 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
       index.VALOR_TOTAL = index.VALOR_UNITARIO * index.QUANTIDADE
       setSale(saleList);
       localStorage.setItem("@Sale:user", JSON.stringify(saleList));
+
+      let total = saleList.map((sale) => (
+        sale.VALOR_TOTAL
+      ));
+
+      localStorage.setItem("@Total:user", JSON.stringify(total));
     } else {
       const saleFiltered = saleList.filter((product) => product.ID_PRODUTO !== data.ID_PRODUTO);
       setSale(saleFiltered);
       localStorage.setItem("@Sale:user", JSON.stringify(saleFiltered));
+
+      let totalItens = saleFiltered.map((sale) => (
+        sale.VALOR_TOTAL
+      ));
+/* 
+      var subtractItens = 0;
+      for (let i = 0; i < total.length; i++) {
+        subtractItens -= total[i]
+      }
+ */
+      localStorage.setItem("@Total:user", JSON.stringify(totalItens));
     }
   }
 
