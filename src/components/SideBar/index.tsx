@@ -28,9 +28,11 @@ export function SideBar() {
                 Cardápio
               </IconWrapper>
             </NavTo>
+          </div>
+          <div>
             <LogoutButton onClick={() => { }}>
               <IconWrapper>
-                <GiExitDoor size={21} />
+                <GiExitDoor style={{color: "var(--shape)"}}size={21} />
                 Sair
               </IconWrapper>
             </LogoutButton>

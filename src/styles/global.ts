@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
         --semi-blue: #0000FF;
         --text-title: #363f5f;
         --text-body: #969cb3;
-        --background: #FAFAFA;
+        --background: #EEEEEE;
         --shape: #FFFFFF;
         --whatsapp: #34af23;
     }
@@ -47,4 +47,10 @@ export const GlobalStyle = createGlobalStyle`
         cursor: pointer;
         border: none;
     }
+
+    input {
+        border-radius: 0.2rem;
+        outline: none;
+    } 
+    
 `

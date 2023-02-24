@@ -7,30 +7,38 @@ export const Container = styled(motion.main)`
             position: absolute;
             top: 0;
             left: 0;
+
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
 `;
 
 export const Content = styled(motion.div)`
     width: 13rem;
-    height: 50rem;
-    position: relative;
+    height: 100vh;
+    display: flex;
     background: var(--background);
     box-shadow: 0px 2px 2px 4px rgba(0, 0, 0, 0.3);
     background-image: 
           linear-gradient(
            to bottom,
-           #00008B,
-           #6495ED 
+           #00004B, 
+           #00008B
           );
 `;
 
 export const MenuBars = styled(motion.nav)`
         width: 100%;
-        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        
             div {
             display: flex;
             align-items: center;
-            justify-content: center;
             flex-direction: column;
+            margin: 1rem;
             img {
                 width: 8rem;
                 margin-top: 2rem;
@@ -46,7 +54,7 @@ justify-content: center;
 
 export const NavTo = styled(Link)`
                 margin-top: 3rem;
-                border-color: var(--shape);
+                border-color: var(--blue);
                 color: var(--shape);
 
                 display: flex;
@@ -61,7 +69,7 @@ export const NavTo = styled(Link)`
                 &:hover {
                     transform: scale(1.1);
                     transition: 200ms;
-                    color: var(--blue-light);
+                    filter: brightness(0.8);
                 }
                 &.active {
                     filter: brightness(1);
@@ -87,7 +95,7 @@ export const LogoutButton = styled.button`
                 &:hover {
                     transform: scale(1.1);
                     transition: 200ms;
-                    color: var(--shape);
+                    filter: brightness(0.8);
                 }
                 &.active {
                     filter: brightness(1);
@@ -97,3 +105,4 @@ export const LogoutButton = styled.button`
                     font-weight: bold;
                 }
 `;
+

@@ -86,9 +86,8 @@ export function Cart() {
 
     let index = cdMesa.shift()
 
-    console.log(cdMesa)
-
     navigate(`/confirm-sale/${index}`);
+    setIsOpen(isOpen => !isOpen);
   }
 
   useEffect(() => {
@@ -134,6 +133,15 @@ export function Cart() {
                   marginTop: "15rem",
                   color: "var(--shape)"
                 }}>Valor Total:  {total}</span>
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--shape)",
+                  margin: "1rem"
+                }}>Mesa {cards.map((card) => card.CD_MESA).shift()}</span>
+
               <ConfirmButton onClick={handleGoToConfirmPage}>Continuar</ConfirmButton>
             </FooterCart>
           )
