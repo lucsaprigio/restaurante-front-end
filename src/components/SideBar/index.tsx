@@ -1,6 +1,5 @@
 import { BsPencilSquare } from 'react-icons/bs';
 import { GiExitDoor, GiTable } from 'react-icons/gi';
-import { MdOutlineAddCircleOutline } from 'react-icons/md'
 
 import {
   MenuBars,

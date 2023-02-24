@@ -14,22 +14,26 @@ import {
   Content,
 } from './styles';
 import { api } from '../../services/api';
+import { useParams } from 'react-router-dom';
 
 export function NewSale() {
   const { addLaunch } = useSaleLaunch();
+  const { id } = useParams();
+
 
   const [products, setProducts] = useState<ProductsProps[]>([]);
 
-  async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, VALOR_TOTAL }: ProductsProps) {
+  async function addItem({ CD_MESA, ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, VALOR_TOTAL }: ProductsProps) {
     const sumQuantity = 1;
 
     let data = {
+      CD_MESA: Number(id),
       ID_PRODUTO,
       DESCRICAO,
       VALOR_UNITARIO,
       CD_CATEGORIA,
       QUANTIDADE: sumQuantity,
-      VALOR_TOTAL: VALOR_UNITARIO * 3
+      VALOR_TOTAL: VALOR_UNITARIO
     }
 
     addLaunch({ ...data });

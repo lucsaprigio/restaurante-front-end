@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { IoIosCloseCircle } from 'react-icons/io';
 
 import { useSaleLaunch } from '../../context/saleProvider';
 import { ProductsProps } from '../../DTOs/ProductDTO';
@@ -7,16 +9,21 @@ import Carrinho from '../../assets/carrinho-de-compras.png';
 import { SaleCard } from '../SaleCard';
 import {
   Container,
+  WrapperCards,
   FooterCart,
   ConfirmButton,
   CartImg,
+  CloseButton,
 } from './styles';
 
 import Hamburguer from '../../assets/hamburguer.png';
 import Refrigerante from '../../assets/refrigerante.png';
 import { ButtonCart } from '../ButtonCart';
+import { ConfirmSale } from '../../Pages/ConfirmSale';
 
 export function Cart() {
+  const navigate = useNavigate();
+
   const variants = {
     open: { opacity: 1, x: 0.2 },
     closed: { opacity: 0, x: "100%", transition: { duration: .1 } },
@@ -37,6 +44,7 @@ export function Cart() {
     setTotal(JSON.parse(storagedTotal));
   }
 
+  // Função do Provider de adicionar itens ao pedido/carrinho
   async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
     let data = {
       ID_PRODUTO,
@@ -50,10 +58,8 @@ export function Cart() {
     addLaunch({ ...data });
   }
 
-  async function openCart() {
-    setIsOpen(isOpen => !isOpen);
-  }
 
+  // Função do Provider de remover itens ao pedido/carrinho
   async function removeItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
     const sumQuantity = +1;
 
@@ -69,6 +75,22 @@ export function Cart() {
     removeLaunch({ ...data })
   }
 
+  async function openCart() {
+    setIsOpen(isOpen => !isOpen);
+  }
+
+  async function handleGoToConfirmPage() {
+    const cdMesa = cards.map((card) => (
+      card.CD_MESA
+    ))
+
+    let index = cdMesa.shift()
+
+    console.log(cdMesa)
+
+    navigate(`/confirm-sale/${index}`);
+  }
+
   useEffect(() => {
     setInterval(() => {
       loadCards();
@@ -81,21 +103,26 @@ export function Cart() {
         animate={isOpen ? "open" : "closed"}
         variants={variants}
       >
+        <CloseButton onClick={() => setIsOpen(false)}>
+          <IoIosCloseCircle style={{ display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }} size={30} />
+        </CloseButton>
         <CartImg src={Carrinho} alt="" />
-        {
-          cards.map((card) => (
-            <SaleCard
-              key={card.ID_PRODUTO}
-              description={card.DESCRICAO}
-              price={card.VALOR_UNITARIO.toFixed(2)}
-              quantity={card.QUANTIDADE}
-              total={card.VALOR_TOTAL.toFixed(2)}
-              src={card.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
-              add={() => addItem({ ...card })}
-              remove={() => removeItem({ ...card })}
-            />
-          ))
-        }
+        <WrapperCards>
+          {
+            cards.map((card) => (
+              <SaleCard
+                key={card.ID_PRODUTO}
+                description={card.DESCRICAO}
+                price={card.VALOR_UNITARIO.toFixed(2)}
+                quantity={card.QUANTIDADE}
+                total={card.VALOR_TOTAL.toFixed(2)}
+                src={card.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
+                add={() => addItem({ ...card })}
+                remove={() => removeItem({ ...card })}
+              />
+            ))
+          }
+        </WrapperCards>
         {
           cards.length > 0 ? (
             <FooterCart>
@@ -106,22 +133,29 @@ export function Cart() {
                   justifyContent: "center",
                   marginTop: "15rem",
                   color: "var(--shape)"
-                }}>{total}</span>
-              <ConfirmButton>Confirmar</ConfirmButton>
+                }}>Valor Total:  {total}</span>
+              <ConfirmButton onClick={handleGoToConfirmPage}>Continuar</ConfirmButton>
             </FooterCart>
-          ) : (<div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "15rem",
-            }}>
-            <span
-              style={{ color: "var(--shape)", textAlign: "center" }}
-            >
-              Sua lista de pedidos está vazia...
-            </span>
-          </div>)
+          )
+            :
+            (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+
+                  position: "absolute",
+                  top: "20rem",
+                  left: '4rem'
+                }}>
+                <span
+                  style={{ color: "var(--shape)", textAlign: "center" }}
+                >
+                  Sua lista de pedidos está vazia...
+                </span>
+              </div>
+            )
         }
       </Container>
       <ButtonCart

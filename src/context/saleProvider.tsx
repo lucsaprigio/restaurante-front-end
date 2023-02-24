@@ -6,6 +6,7 @@ interface Sale {
     name?: string;
     phone?: string;
   },
+  CD_MESA?: number;
   ID_PRODUTO: number,
   DESCRICAO: string,
   VALOR_UNITARIO: number,
@@ -42,8 +43,9 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
     loadData()
   }, []);
 
-  async function addLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
+  async function addLaunch({ CD_MESA, ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
     const data = {
+      CD_MESA,
       ID_PRODUTO,
       DESCRICAO,
       VALOR_UNITARIO,
@@ -77,7 +79,7 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
 
 
     localStorage.setItem("@Sale:user", JSON.stringify(saleList));
-    localStorage.setItem("@Total:user", JSON.stringify(sumItens));
+    localStorage.setItem("@Total:user", JSON.stringify((sumItens).toFixed(2)));
   }
 
   async function removeLaunch({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: Sale) {
@@ -104,22 +106,27 @@ const SaleProvider = ({ children }: SaleProviderProps) => {
         sale.VALOR_TOTAL
       ));
 
-      localStorage.setItem("@Total:user", JSON.stringify(total));
+      let subtract = 0;
+      for (let i = 0; i < total.length; i++) {
+        subtract -= total[i]
+      }
+
+      localStorage.setItem("@Total:user", JSON.stringify(Math.abs((subtract)).toFixed(2)));
     } else {
       const saleFiltered = saleList.filter((product) => product.ID_PRODUTO !== data.ID_PRODUTO);
       setSale(saleFiltered);
       localStorage.setItem("@Sale:user", JSON.stringify(saleFiltered));
 
-      let totalItens = saleFiltered.map((sale) => (
-        sale.VALOR_TOTAL
+      let total = saleFiltered.map((sale) => (
+        sale.VALOR_UNITARIO
       ));
-/* 
-      var subtractItens = 0;
+
+      let resum = 0;
       for (let i = 0; i < total.length; i++) {
-        subtractItens -= total[i]
+        resum -= total[i]
       }
- */
-      localStorage.setItem("@Total:user", JSON.stringify(totalItens));
+
+      localStorage.setItem("@Total:user", JSON.stringify(Math.abs(resum).toFixed(2)));
     }
   }
 

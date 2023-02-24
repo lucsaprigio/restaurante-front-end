@@ -1,4 +1,5 @@
 export interface ProductsProps {
+  CD_MESA?: number;
   ID_PRODUTO: number;
   DESCRICAO: string;
   VALOR_UNITARIO: number;
