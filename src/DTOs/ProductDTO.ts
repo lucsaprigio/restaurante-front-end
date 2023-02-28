@@ -1,9 +1,10 @@
 export interface ProductsProps {
   CD_MESA?: number;
   ID_PRODUTO: number;
-  DESCRICAO: string;
-  VALOR_UNITARIO: number;
+  DESCRICAO_PRODUTO: string;
+  UNITARIO_PRODUTO: number;
+  DESCONTO_PRODUTO?: number;
   CD_CATEGORIA: number;
-  QUANTIDADE: number;
-  VALOR_TOTAL?: number;
+  QUANTIDADE_PRODUTO: number;
+  TOTAL_PRODUTO?: number;
 }

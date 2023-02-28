@@ -2,6 +2,8 @@ import { useState, InputHTMLAttributes } from 'react';
 import { BiEdit } from 'react-icons/bi';
 import { GrFormAdd } from 'react-icons/gr';
 import { MdOutlineRemove } from 'react-icons/md';
+import { FaTrash } from 'react-icons/fa';
+
 import {
   Container,
   Description,
@@ -12,10 +14,11 @@ import {
   Quantity,
   WrapperQuantity,
   TotalPrice,
+  RemoveButton,
 } from './styles';
-import { useSaleLaunch } from '../../context/saleProvider';
 
 export interface ConfirmCardsProps extends InputHTMLAttributes<HTMLInputElement> {
+  index?: number;
   description: string;
   price: string;
   quantity: string;
@@ -23,10 +26,10 @@ export interface ConfirmCardsProps extends InputHTMLAttributes<HTMLInputElement>
   disabled: boolean;
   add: () => Promise<void>;
   remove: () => Promise<void>;
-
+  removeItem: () => Promise<void>;
 }
 
-export function ConfirmCards({ description, price, quantity, total, add, remove }: ConfirmCardsProps) {
+export function ConfirmCards({ index, description, price, quantity, total, add, remove, removeItem }: ConfirmCardsProps) {
   const [editInput, setEditInput] = useState(true);
 
   async function handleEditInput() {
@@ -45,6 +48,7 @@ export function ConfirmCards({ description, price, quantity, total, add, remove 
           />
         </WrapperContent>
         <WrapperContent>
+          <strong>R$</strong>
           <Price
             enabled={!editInput}
             disabledEdit={editInput}
@@ -66,6 +70,7 @@ export function ConfirmCards({ description, price, quantity, total, add, remove 
           </button>
         </WrapperQuantity>
         <WrapperContent>
+          <strong>R$</strong>
           <TotalPrice
             enabled={!editInput}
             disabledEdit={editInput}
@@ -76,6 +81,9 @@ export function ConfirmCards({ description, price, quantity, total, add, remove 
       <EditButton onClick={handleEditInput}>
         <BiEdit style={{ color: "var(--blue)" }} size={24} />
       </EditButton>
+      <RemoveButton onClick={removeItem}>
+        <FaTrash style={{ color: "var(--blue)" }} size={18} />
+      </RemoveButton>
     </Container>
   );
 }

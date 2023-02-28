@@ -44,7 +44,6 @@ export function Sale() {
       totalProduct = sumProduct
     }
 
-
     setSales(response.data);
     setTotal(totalProduct);
   }

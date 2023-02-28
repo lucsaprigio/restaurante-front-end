@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const Container = styled.div`
-    width: 60%;
+    width: 100%;
     height: 2.5rem;
 
     background:
@@ -39,7 +39,6 @@ export const WrapperContent = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 
     margin: 0 0.4rem;
 `;
@@ -171,6 +170,16 @@ export const EditButton = styled.button`
   background: transparent;
   border: none;
   display: none;
+
+  &:hover {
+      transform: scale(1.1);
+      transition: 50ms;
+}
+
+`;
+export const RemoveButton = styled.button`
+  background: transparent;
+  border: none;
 
   &:hover {
       transform: scale(1.1);

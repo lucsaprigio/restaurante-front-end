@@ -1,5 +1,5 @@
-import react, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams, } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import MesaSvg from '../../assets/mesa-de-jantar.png';
 
 import {
@@ -12,7 +12,7 @@ import {
 import { api } from '../../services/api';
 import { Loading } from '../../components/Loading';
 
-interface Table {
+export interface Table {
   CD_MESA: number;
   OCUPADA: string;
 }
@@ -31,7 +31,7 @@ export function Home() {
   useEffect(() => {
     setLoading(false);
     listTables();
-  }, []);
+  }, [tables]);
 
   return (
     <Container>

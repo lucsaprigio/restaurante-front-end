@@ -45,14 +45,14 @@ export function Cart() {
   }
 
   // Função do Provider de adicionar itens ao pedido/carrinho
-  async function addItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
+  async function addItem({ ID_PRODUTO, DESCRICAO_PRODUTO, UNITARIO_PRODUTO, CD_CATEGORIA, QUANTIDADE_PRODUTO, TOTAL_PRODUTO }: ProductsProps) {
     let data = {
       ID_PRODUTO,
-      DESCRICAO,
-      VALOR_UNITARIO,
+      DESCRICAO_PRODUTO,
+      UNITARIO_PRODUTO,
       CD_CATEGORIA,
-      QUANTIDADE: +1,
-      VALOR_TOTAL
+      QUANTIDADE_PRODUTO: +1,
+      TOTAL_PRODUTO
     }
 
     addLaunch({ ...data });
@@ -60,16 +60,16 @@ export function Cart() {
 
 
   // Função do Provider de remover itens ao pedido/carrinho
-  async function removeItem({ ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, QUANTIDADE, VALOR_TOTAL }: ProductsProps) {
+  async function removeItem({ ID_PRODUTO, DESCRICAO_PRODUTO, UNITARIO_PRODUTO, CD_CATEGORIA, QUANTIDADE_PRODUTO, TOTAL_PRODUTO }: ProductsProps) {
     const sumQuantity = +1;
 
     let data = {
       ID_PRODUTO,
-      DESCRICAO,
-      VALOR_UNITARIO,
+      DESCRICAO_PRODUTO,
+      UNITARIO_PRODUTO,
       CD_CATEGORIA,
-      QUANTIDADE: sumQuantity,
-      VALOR_TOTAL
+      QUANTIDADE_PRODUTO: sumQuantity,
+      TOTAL_PRODUTO
     }
 
     removeLaunch({ ...data })
@@ -111,10 +111,10 @@ export function Cart() {
             cards.map((card) => (
               <SaleCard
                 key={card.ID_PRODUTO}
-                description={card.DESCRICAO}
-                price={card.VALOR_UNITARIO.toFixed(2)}
-                quantity={card.QUANTIDADE}
-                total={card.VALOR_TOTAL.toFixed(2)}
+                description={card.DESCRICAO_PRODUTO}
+                price={card.UNITARIO_PRODUTO.toFixed(2)}
+                quantity={card.QUANTIDADE_PRODUTO}
+                total={card.TOTAL_PRODUTO.toFixed(2)}
                 src={card.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
                 add={() => addItem({ ...card })}
                 remove={() => removeItem({ ...card })}

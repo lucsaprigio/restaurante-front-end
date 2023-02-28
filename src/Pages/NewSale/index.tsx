@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { useSaleLaunch } from '../../context/saleProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,31 +16,50 @@ import {
   Content,
 } from './styles';
 import { api } from '../../services/api';
-import { useParams } from 'react-router-dom';
+
+import { Table } from '../Home';
 
 export function NewSale() {
   const { addLaunch } = useSaleLaunch();
   const { id } = useParams();
+  const navigate = useNavigate();
 
 
   const [products, setProducts] = useState<ProductsProps[]>([]);
+  const [listSale, setListSale] = useState<Table[]>([]);
 
-  async function addItem({ CD_MESA, ID_PRODUTO, DESCRICAO, VALOR_UNITARIO, CD_CATEGORIA, VALOR_TOTAL }: ProductsProps) {
+  async function tableStatus() {
+    const response = await api.get(`/check-table/${id}`);
+
+    setListSale(response.data);
+
+    const index = listSale.map(index => index.OCUPADA);
+
+    if (index[0] === 'S') {
+      toast.info(`Mesa ${id} está ocupada 🚫`);
+
+      setTimeout(() => {
+        navigate('/')
+      }, 3000)
+    }
+  }
+
+  async function addItem({ ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO, UNITARIO_PRODUTO, CD_CATEGORIA, TOTAL_PRODUTO }: ProductsProps) {
     const sumQuantity = 1;
 
     let data = {
       CD_MESA: Number(id),
       ID_PRODUTO,
-      DESCRICAO,
-      VALOR_UNITARIO,
+      DESCRICAO_PRODUTO,
+      UNITARIO_PRODUTO,
       CD_CATEGORIA,
-      QUANTIDADE: sumQuantity,
-      VALOR_TOTAL: VALOR_UNITARIO
+      QUANTIDADE_PRODUTO: sumQuantity,
+      TOTAL_PRODUTO: UNITARIO_PRODUTO
     }
 
     addLaunch({ ...data });
 
-    toast.success(`${data.DESCRICAO} foi adicionado ao pedido!`, {
+    toast.success(`${data.DESCRICAO_PRODUTO} foi adicionado ao pedido!`, {
       position: "bottom-left",
       autoClose: 3000,
       hideProgressBar: false,
@@ -58,7 +79,8 @@ export function NewSale() {
 
   useEffect(() => {
     listProducts();
-  }, []);
+    tableStatus();
+  }, [listSale]);
 
   return (
     <Container>
@@ -71,9 +93,9 @@ export function NewSale() {
           products.map((product) => (
             <Cards
               key={product.ID_PRODUTO}
-              description={product.DESCRICAO}
-              price={product.VALOR_UNITARIO.toFixed(2)}
-              promotionPrice={product.VALOR_UNITARIO.toFixed(2)}
+              description={product.DESCRICAO_PRODUTO}
+              price={product.UNITARIO_PRODUTO.toFixed(2)}
+              promotionPrice={product.UNITARIO_PRODUTO.toFixed(2)}
               information='loren ipsun korsen'
               src={product.CD_CATEGORIA === 1 ? Hamburguer : Refrigerante}
               add={() => addItem({ ...product })}
