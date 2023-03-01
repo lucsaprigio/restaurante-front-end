@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -6,10 +6,15 @@ import {
   Content,
   Header,
   Title,
+  UpdateContainer,
+  AddButton,
   Sales,
   SaleFooter,
 } from './styles';
 import { api } from '../../services/api';
+import { ConfirmCards } from '../../components/ConfirmCards';
+import { ConfirmedCards } from '../../components/ConfirmedCards';
+import { Confirm } from '../ConfirmSale/styles';
 
 export interface Sale {
   ID: number;
@@ -28,9 +33,18 @@ export interface Sale {
   QUANTIDADE_PRODUTO: number;
 }
 
+interface InputListProps {
+  description: string;
+  quantity: string;
+  price: string;
+  totalPrice?: string;
+}
+
 export function Sale() {
   const { id } = useParams();
   const [sales, setSales] = useState<Sale[]>([]);
+  const [editSale, setEditSale] = useState<InputListProps[]>([]);
+  const [description, setDescription] = useState('');
   const [total, setTotal] = useState<number>(0);
 
   async function listSales() {
@@ -48,6 +62,28 @@ export function Sale() {
     setTotal(totalProduct);
   }
 
+  async function handleAddItem(e: FormEvent) {
+    e.preventDefault();
+
+    const list = [...editSale];
+
+    const data = {
+      description: "",
+      price: "",
+      quantity: "",
+    }
+
+    list.push({ ...data })
+
+    setEditSale(list);
+    console.log(editSale)
+  }
+
+  async function handleEditItemIndex(e: any, index: number) {
+    editSale[index] = e.target.value;
+    setEditSale([...editSale])
+  }
+
   useEffect(() => {
     listSales();
   }, [])
@@ -62,26 +98,37 @@ export function Sale() {
           sales.map((sale) => (
             <Sales key={sale.ID}>
               <div>
-                <span className="description">
-                  {sale.DESCRICAO_PRODUTO}
-                </span>
-              </div>
-
-              <div>
-                <span className="price">
-                  Valor: R$ {sale.UNITARIO_PRODUTO}
-                </span>
-
-                <span className="quantity">
-                  Qtd: {sale.QUANTIDADE_PRODUTO}
-                </span>
-                <span className="totalPrice">
-                  Total: R$ {sale.TOTAL_PRODUTO}
-                </span>
+                <ConfirmedCards
+                  description={sale.DESCRICAO_PRODUTO}
+                  price={sale.UNITARIO_PRODUTO.toFixed(2)}
+                  quantity={sale.QUANTIDADE_PRODUTO.toString()}
+                  total={sale.TOTAL_PRODUTO.toFixed(2)}
+                  disabled={false}
+                />
               </div>
             </Sales>
           ))
         }
+        <UpdateContainer>
+          {
+            editSale.map((sale, index) => (
+              <>
+                <ConfirmCards
+                  description={sale.description}
+                  onChangeDescription={e => handleEditItemIndex(e, index)}
+                  price={sale.price}
+                  onChangePrice={e => handleEditItemIndex(e, index)}
+                  quantity={sale.quantity}
+                  onChangeQuantity={e => handleEditItemIndex(e, index)}
+                  total={sale.totalPrice}
+                  onChangeTotal={e => handleEditItemIndex(e, index)}
+                  disabled={false}
+                />
+              </>
+            ))
+          }
+          <AddButton onClick={handleAddItem}>Adcionar</AddButton>
+        </UpdateContainer>
         <SaleFooter>
           <strong>
             Valor Total

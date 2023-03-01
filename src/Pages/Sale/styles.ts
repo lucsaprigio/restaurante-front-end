@@ -42,18 +42,31 @@ export const SubTitle = styled.strong`
 `;
 
 
-export const Sales = styled.div`
+export const Sales = styled.form`
+  width: 100%;
+
   display: flex;
   align-items: left;
   justify-content: space-around;
 
-  margin-top: 2rem;
-  border-bottom: solid 1px;
-  
+  margin-top: 0.4rem;
+`;
 
-  span {
-    margin-left: 5rem;
-  }
+export const UpdateContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-top: 1rem;
+
+`;
+
+export const AddButton = styled.button`
+      width: 11rem;
+      height: 2rem;
+      background: var(--blue);
+      color: var(--shape);
+      border-radius: .4rem;
 `;
 
 export const SaleFooter = styled.div`
