@@ -1,7 +1,5 @@
 import { useState, InputHTMLAttributes, ChangeEventHandler } from 'react';
 import { BiEdit } from 'react-icons/bi';
-import { GrFormAdd } from 'react-icons/gr';
-import { MdOutlineRemove } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
 
 import {
@@ -20,13 +18,13 @@ import {
 export interface ConfirmCardsProps<T> extends InputHTMLAttributes<HTMLInputElement> {
   index?: number;
   description: string;
-  onChangeDescription: ChangeEventHandler<T> | undefined;
+  onChangeDescription?: ChangeEventHandler<T> | undefined;
   price: string;
-  onChangePrice: ChangeEventHandler<T> | undefined;
+  onChangePrice?: ChangeEventHandler<T> | undefined;
   quantity: string;
-  onChangeQuantity: ChangeEventHandler<T> | undefined;
+  onChangeQuantity?: ChangeEventHandler<T> | undefined;
   total: string;
-  onChangeTotal: ChangeEventHandler<T> | undefined;
+  onChangeTotal?: ChangeEventHandler<T> | undefined;
   disabled: boolean;
   add?: () => Promise<void>;
   remove?: () => Promise<void>;
@@ -45,6 +43,7 @@ export function ConfirmCards({ index,
   add,
   remove,
   removeItem
+  //@ts-ignore
 }: ConfirmCardsProps<T>) {
 
   const [editInput, setEditInput] = useState(true);
@@ -53,15 +52,12 @@ export function ConfirmCards({ index,
     setEditInput(editInput => !editInput);
   }
 
-  async function handleChangeItem(e: any, index: number) {
-    description = e.target.value;
-  }
-
   return (
     <Container>
       <Wrapper>
         <WrapperContent>
           <Description
+            max-length={25}
             enabled={!editInput}
             disabledEdit={editInput}
             value={description}
@@ -72,35 +68,35 @@ export function ConfirmCards({ index,
         <WrapperContent>
           <strong>R$</strong>
           <Price
+            placeholder='Valor'
             enabled={!editInput}
             disabledEdit={editInput}
             value={price}
             onChange={onChangePrice}
-            readOnly={!editInput} />
+            readOnly={!editInput}
+          />
         </WrapperContent>
         <WrapperQuantity>
-          <button onClick={add}>
-            <GrFormAdd size={20} />
-          </button>
           <Quantity
             maxLength={3}
+            type="number"
+            placeholder='Qtd'
             enabled={!editInput}
             disabledEdit={editInput}
             value={quantity}
             onChange={onChangeQuantity}
             readOnly={!editInput} />
-          <button onClick={remove}>
-            <MdOutlineRemove size={20} />
-          </button>
         </WrapperQuantity>
         <WrapperContent>
           <strong>R$</strong>
           <TotalPrice
+            placeholder='Total'
             enabled={!editInput}
             disabledEdit={editInput}
             value={total}
             onChange={onChangeTotal}
-            readOnly={editInput} />
+            readOnly={editInput}
+          />
         </WrapperContent>
       </Wrapper>
       <EditButton onClick={handleEditInput}>

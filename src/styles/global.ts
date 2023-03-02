@@ -51,6 +51,9 @@ export const GlobalStyle = createGlobalStyle`
     input {
         border-radius: 0.2rem;
         outline: none;
+
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
     } 
-    
 `

@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
 
 interface Props {
@@ -137,6 +138,15 @@ export const Quantity = styled.input<Props>`
       border-color: var(--blue);
   `
   }
+
+  input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+}
+  input[type=number] { 
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
 `;
 
 export const TotalPrice = styled.input<Props>`

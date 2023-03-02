@@ -14,7 +14,6 @@ import {
 import { api } from '../../services/api';
 import { ConfirmCards } from '../../components/ConfirmCards';
 import { ConfirmedCards } from '../../components/ConfirmedCards';
-import { Confirm } from '../ConfirmSale/styles';
 
 export interface Sale {
   ID: number;
@@ -44,7 +43,6 @@ export function Sale() {
   const { id } = useParams();
   const [sales, setSales] = useState<Sale[]>([]);
   const [editSale, setEditSale] = useState<InputListProps[]>([]);
-  const [description, setDescription] = useState('');
   const [total, setTotal] = useState<number>(0);
 
   async function listSales() {
@@ -71,6 +69,7 @@ export function Sale() {
       description: "",
       price: "",
       quantity: "",
+      total: ""
     }
 
     list.push({ ...data })
@@ -81,7 +80,26 @@ export function Sale() {
 
   async function handleEditItemIndex(e: any, index: number) {
     editSale[index] = e.target.value;
-    setEditSale([...editSale])
+    setEditSale([...editSale]);
+  }
+
+  async function handleEditPrice(e: any, index: number) {
+    editSale[index].price = e.target.value
+
+    editSale[index].price = editSale[index].price.replace(/\D/g, "");
+    editSale[index].price = editSale[index].price.replace(/(\d)(\d{2})$/, "$1, $2");
+    editSale[index].price = editSale[index].price.replace(/(?=(\d{3})+(\D))\B/g, ".");
+    e.target.value = editSale[index].price
+
+    setEditSale([...editSale]);
+    console.log(editSale[index].price)
+  }
+
+  async function handleSumTotal(e: any, index: number) {
+    editSale[index].price 
+
+
+    setEditSale([...editSale]);
   }
 
   useEffect(() => {
@@ -117,11 +135,11 @@ export function Sale() {
                   description={sale.description}
                   onChangeDescription={e => handleEditItemIndex(e, index)}
                   price={sale.price}
-                  onChangePrice={e => handleEditItemIndex(e, index)}
+                  onChangePrice={e => handleEditPrice(e, index)}
                   quantity={sale.quantity}
                   onChangeQuantity={e => handleEditItemIndex(e, index)}
                   total={sale.totalPrice}
-                  onChangeTotal={e => handleEditItemIndex(e, index)}
+                  onChangeTotal={e => handleSumTotal(e, index)}
                   disabled={false}
                 />
               </>
