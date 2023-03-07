@@ -7,6 +7,7 @@ import {
   Header,
   Title,
   UpdateContainer,
+  ButtonFooter,
   AddButton,
   Sales,
   SaleFooter,
@@ -14,6 +15,7 @@ import {
 import { api } from '../../services/api';
 import { ConfirmCards } from '../../components/ConfirmCards';
 import { ConfirmedCards } from '../../components/ConfirmedCards';
+import { SaleModal } from '../../components/SaleModal';
 
 export interface Sale {
   ID: number;
@@ -44,6 +46,16 @@ export function Sale() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [editSale, setEditSale] = useState<InputListProps[]>([]);
   const [total, setTotal] = useState<number>(0);
+  const [isNewTrasactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
+
+
+  function handleOpenNewTransactionModal() {
+    setIsNewTransactionModalOpen(true);
+  }
+
+  function handleCloseNewTransactionModal() {
+    setIsNewTransactionModalOpen(false);
+  }
 
   async function listSales() {
     const response = await api.get(`/list-table-order/${id}`)
@@ -89,6 +101,7 @@ export function Sale() {
     editSale[index].price = editSale[index].price.replace(/\D/g, "");
     editSale[index].price = editSale[index].price.replace(/(\d)(\d{2})$/, "$1, $2");
     editSale[index].price = editSale[index].price.replace(/(?=(\d{3})+(\D))\B/g, ".");
+
     e.target.value = editSale[index].price
 
     setEditSale([...editSale]);
@@ -96,7 +109,7 @@ export function Sale() {
   }
 
   async function handleSumTotal(e: any, index: number) {
-    editSale[index].price 
+    editSale[index].price
 
 
     setEditSale([...editSale]);
@@ -145,7 +158,9 @@ export function Sale() {
               </>
             ))
           }
-          <AddButton onClick={handleAddItem}>Adcionar</AddButton>
+          <ButtonFooter>
+            <AddButton onClick={handleOpenNewTransactionModal}>Adicionar</AddButton>
+          </ButtonFooter>
         </UpdateContainer>
         <SaleFooter>
           <strong>
@@ -156,6 +171,10 @@ export function Sale() {
           </strong>
         </SaleFooter>
       </Content>
+      <SaleModal
+        isOpen={isNewTrasactionModalOpen}
+        onRequestClose={handleCloseNewTransactionModal}
+      />
     </Container>
   );
 }

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { SaleProvider } from "./context/saleProvider"
 import { BrowserRouter } from "react-router-dom"
 

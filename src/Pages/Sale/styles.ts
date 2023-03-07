@@ -61,12 +61,26 @@ export const UpdateContainer = styled.div`
 
 `;
 
+export const ButtonFooter = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: rows;
+    margin: 1rem;
+`;
+
 export const AddButton = styled.button`
       width: 11rem;
       height: 2rem;
       background: var(--blue);
       color: var(--shape);
+      margin: 0 2rem;
       border-radius: .4rem;
+
+      &:hover {
+        transision: 200ms;
+        
+      }
 `;
 
 export const SaleFooter = styled.div`
@@ -79,3 +93,4 @@ export const SaleFooter = styled.div`
       font-size: 1.2rem;
     }
 `;
+

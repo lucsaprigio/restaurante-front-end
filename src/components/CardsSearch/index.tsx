@@ -8,10 +8,7 @@ import {
   Price,
   PromotionPrice,
   ImgWrapper,
-  AddButton,
 } from './styles';
-
-import Add from '../../assets/add.png'
 
 interface Props {
   description: string;
@@ -22,7 +19,7 @@ interface Props {
   add?: () => Promise<void>;
 }
 
-export function Cards({ description, information, price, promotionPrice, src, add }: Props) {
+export function CardsSearch({ description, information, price, promotionPrice, src, add }: Props) {
   return (
     <Container onClick={add}>
       <Wrapper>
@@ -38,9 +35,6 @@ export function Cards({ description, information, price, promotionPrice, src, ad
       <ImgWrapper>
         <img src={src} />
       </ImgWrapper>
-      <AddButton>
-        <img src={Add} />
-      </AddButton>
     </Container>
   );
 }
